@@ -1,7 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::middleware(['auth:sanctum'])->get('/{feed?}/{news?}', [HomeController::class, 'index'])->name('home');
