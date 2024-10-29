@@ -17,8 +17,8 @@ class RssSource implements FeedSourceInterface
 
         $this->title = $array['channel']['title'];
 
-        $this->description = $array['channel']['description'];
+        $this->description = array_key_exists('description', $array['channel']) ? $array['channel']['description'] : '';
 
-        $this->items = $array['channel']['item'];
+        $this->items = array_key_exists('item', $array['channel']) ? $array['channel']['item'] : [];
     }
 }
