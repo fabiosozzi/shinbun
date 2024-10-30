@@ -17,7 +17,10 @@ class FeedDTO extends ValidatedDTO
     protected function rules(): array
     {
         return [
+            'title' => ['string'],
             'link' => ['required', 'string'],
+            'description' => ['string'],
+            'language' => ['string'],
         ];
     }
 

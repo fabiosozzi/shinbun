@@ -19,6 +19,8 @@ class GetSpecificFeedSubscriptionItem
 
     public function asController(Request $request)
     {
+        // TODO: check that the item belongs to the user
+        
         return response()->json([
             'news' => new FeedSubscriptionItemContentResource($this->handle($request->feed_subscription_item_id)),
         ]);

@@ -23,6 +23,8 @@ class GetAllFeedSubscriptions
 
     public function asController(Request $request): JsonResponse
     {
+        // TODO: must include pagination?
+        
         $user_id = $request->user()->id;
 
         return response()->json([

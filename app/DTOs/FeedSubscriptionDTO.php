@@ -19,6 +19,8 @@ class FeedSubscriptionDTO extends ValidatedDTO
     protected function rules(): array
     {
         return [
+            'title' => ['string'],
+            'description' => ['string'],
             'link' => ['required', 'string'],
             'user_id' => ['required', 'integer'],
         ];

@@ -25,21 +25,18 @@ class AddNewFeedSubscription
         $feed_data_array = $feedDTO->toArray();
         $feed_data_array['user_id'] = $user_id;
 
-        $feed_subscription_dto = new FeedSubscriptionDTO($feed_data_array);
-
-        $feed_subscription_array = $feed_subscription_dto->toArray();
-
         if (! isset($feedDTO->title)) {
-            $feed_subscription_array['title'] = $existingFeed->title;
+            $feed_data_array['title'] = $existingFeed->title;
         }
 
         if (! isset($feedDTO->description)) {
-            $feed_subscription_array['description'] = $existingFeed->description;
+            $feed_data_array['description'] = $existingFeed->description;
         }
 
-        $feed_subscription = FeedSubscription::create($feed_subscription_array);
+        $feed_subscription_dto = new FeedSubscriptionDTO($feed_data_array);
+        $feed_subscription = FeedSubscription::create($feed_subscription_dto->toArray());
 
-        // TODO: utilizzare Queue per la sincronizzazione tra Feed e FeedSubscription
+        // TODO: use an action to sync FeedItems and FeedSubscriptionItems (with Queue)
 
         return $feed_subscription;
     }

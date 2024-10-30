@@ -19,6 +19,8 @@ class GetAllItemsFromFeedSubscriptions
 
     public function asController(Request $request)
     {
+        // TODO: must include pagination?
+
         return response()->json([
             'news' => $this->handle($request->feed_subscription_id),
         ]);

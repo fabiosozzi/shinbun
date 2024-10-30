@@ -30,7 +30,7 @@ class AddNewFeed
 
         $feed = Feed::create($feedData);
 
-        // TODO: utilizzare Queue per l'elaborazione dei feed
+        // TODO: utilize Queue for FeedItem fetching & creation
 
         foreach ($feedSource->getItems() as $item) {
             FeedItem::create([
