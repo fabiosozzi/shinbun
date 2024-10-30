@@ -4,8 +4,8 @@ namespace App\Actions\Feed;
 
 use App\Classes\Factories\FeedFactory;
 use App\DTOs\FeedDTO;
+use App\Jobs\Feed\AddItemsToFeedJob;
 use App\Models\Feed;
-use App\Models\FeedItem;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class AddNewFeed
@@ -29,19 +29,22 @@ class AddNewFeed
         }
 
         $feed = Feed::create($feedData);
+        
+        collect($feedSource->getItems())->chunk(50)->each(function ($items) use ($feed) {
+            $array_items = [];
+            $items->each(function ($item) use ($feed, &$array_items) {
+                $array_items[] = [
+                    'feed_id' => $feed->id,
+                    'title' => $item->title,
+                    'guid' => $item->guid,
+                    'link' => $item->link,
+                    'description' => $item->description,
+                    'pub_date' => $item->pub_date,
+                ];
+            });
 
-        // TODO: utilize Queue for FeedItem fetching & creation
-
-        foreach ($feedSource->getItems() as $item) {
-            FeedItem::create([
-                'feed_id' => $feed->id,
-                'title' => $item->title,
-                'guid' => $item->guid,
-                'link' => $item->link,
-                'description' => $item->description,
-                'pub_date' => $item->pub_date,
-            ]);
-        }
+            dispatch(new AddItemsToFeedJob($array_items));
+        });
 
         return $feed;
     }

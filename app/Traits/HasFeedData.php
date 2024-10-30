@@ -4,11 +4,11 @@ namespace App\Traits;
 
 trait HasFeedData
 {
-    private $title;
+    private string $title;
 
-    private $description;
+    private string $description;
 
-    private $items;
+    private array $items;
 
     public function getTitle(): string
     {

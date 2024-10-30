@@ -10,6 +10,7 @@ class FeedItem extends Model
         'feed_id',
         'title',
         'link',
+        'guid',
         'description',
         'pub_date',
     ];
