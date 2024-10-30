@@ -23,7 +23,7 @@ class FeedItemDTO extends ValidatedDTO
             'guid' => ['required', 'string'],
             'link' => ['required', 'string'],
             'description' => ['required', 'string'],
-            //'pub_date' => ['required', 'string'],
+            'pub_date' => ['required', 'string'],
         ];
     }
 

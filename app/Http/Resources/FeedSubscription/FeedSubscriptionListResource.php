@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Feed;
+namespace App\Http\Resources\FeedSubscription;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FeedListResource extends JsonResource
+class FeedSubscriptionListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,7 +18,7 @@ class FeedListResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'link' => $this->link,
-            'items' => FeedItemListResource::collection($this->whenLoaded('items')),
+            'items' => FeedSubscriptionItemListResource::collection($this->whenLoaded('items')),
         ];
     }
 }

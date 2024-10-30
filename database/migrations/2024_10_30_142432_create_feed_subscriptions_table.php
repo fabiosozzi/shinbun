@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Feed;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,14 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feed_items', function (Blueprint $table) {
+        Schema::create('feed_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Feed::class)->constrained();
+            $table->foreignIdFor(User::class)->constrained();
             $table->string('title');
-            $table->string('guid')->unique();
             $table->string('link');
             $table->text('description')->nullable();
-            $table->dateTime('pub_date')->nullable();
+            $table->string('language')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feed_items');
+        Schema::dropIfExists('feed_subscriptions');
     }
 };

@@ -12,14 +12,13 @@ class AddNewFeed
 {
     use AsAction;
 
-    public function handle(FeedDTO $feedDTO, int $user_id): Feed
+    public function handle(FeedDTO $feedDTO): Feed
     {
         $feedContent = file_get_contents($feedDTO->link);
         $feedSource = FeedFactory::create($feedContent);
         $feedSource->extractData($feedContent);
 
         $feedData = $feedDTO->toArray();
-        $feedData['user_id'] = $user_id;
 
         if (! isset($feedDTO->title)) {
             $feedData['title'] = $feedSource->getTitle();
@@ -38,7 +37,7 @@ class AddNewFeed
                 'guid' => $item->guid,
                 'link' => $item->link,
                 'description' => $item->description,
-                //'pub_date' => $item->getPubDate(),
+                'pub_date' => $item->pub_date,
             ]);
         }
 
