@@ -2,6 +2,7 @@
 
 namespace App\Classes\Imports;
 
+use App\DTOs\FeedItemDTO;
 use App\Interfaces\FeedSourceInterface;
 use App\Traits\HasFeedData;
 
@@ -19,6 +20,19 @@ class RssSource implements FeedSourceInterface
 
         $this->description = array_key_exists('description', $array['channel']) ? $array['channel']['description'] : '';
 
-        $this->items = array_key_exists('item', $array['channel']) ? $array['channel']['item'] : [];
+        $items = [];
+        if (array_key_exists('item', $array['channel'])) {
+            foreach ($array['channel']['item'] as $item) {
+                $items[] = new FeedItemDTO([
+                    'title' => $item['title'],
+                    'guid' => $item['guid'],
+                    'link' => $item['link'],
+                    'description' => $item['description'],
+                    'pub_date' => $item['pubDate'],
+                ]);
+            }
+        }
+
+        $this->items = $items;
     }
 }

@@ -7,6 +7,7 @@
     import FeedListItem from '@/Components/FeedListItem.vue';
     import FeedNewsListSkeleton from '@/Components/FeedNewsListSkeleton.vue';
     import FeedNewsItem from '@/Components/FeedNewsItem.vue';
+    import FeedNewsContent from '@/Components/FeedNewsContent.vue';
 
     const props = defineProps({
         title: String,
@@ -18,8 +19,14 @@
 
     const api_feeds = ref(undefined)
     const api_news = ref(undefined)
+    const api_news_content = ref(undefined)
+    const selected_feed_id = ref(undefined)
+    const selected_feed_item_id = ref(undefined)
 
     function get_feeds() {
+        selected_feed_id.value = undefined
+        selected_feed_item_id.value = undefined
+
         axios.get(route('api.feeds.index'))
             .then(response => {
                 api_feeds.value = response.data.feeds
@@ -28,10 +35,24 @@
     }
 
     function get_news(feed_id) {
+        selected_feed_id.value = feed_id
+        selected_feed_item_id.value = undefined
+
         api_news.value = undefined
+        api_news_content.value = undefined
         axios.get(route('api.news.index', { feed: feed_id }))
             .then(response => {
                 api_news.value = response.data.news
+            });
+    }
+
+    function get_news_content(feed_item_id) {
+        selected_feed_item_id.value = feed_item_id
+
+        api_news_content.value = undefined
+        axios.get(route('api.news.show', { feed: selected_feed_id.value, feed_item: feed_item_id }))
+            .then(response => {
+                api_news_content.value = response.data.news
             });
     }
 
@@ -46,12 +67,12 @@
         <div class="w-full mx-auto grow lg:flex xl:px-2">
                 <!-- Left sidebar & main wrapper -->
                 <div class="flex-1 xl:flex">
-                    <div class="px-4 py-6 border-b border-gray-200 sm:px-6 lg:pl-8 xl:w-64 xl:shrink-0 xl:border-b-0 xl:border-r xl:pl-6">
+                    <div class="px-4 py-6 border-b border-gray-200 sm:px-6 lg:pl-8 xl:w-80 xl:shrink-0 xl:border-b-0 xl:border-r xl:pl-6">
                         <template v-if="api_feeds == undefined">
                             <FeedListItemSkeleton v-for="db_feed in db_feeds"></FeedListItemSkeleton>
                         </template>
                         <template v-else>
-                            <FeedListItem v-for="feed in api_feeds" :feedId="feed.id" @click="get_news(feed.id)">
+                            <FeedListItem v-for="feed in api_feeds" :feedId="feed.id" @click="get_news(feed.id)" :selected="feed.id == selected_feed_id ? true : false">
                                 <template #title>
                                     <h2 class="font-bold">{{ feed.title }}</h2>
                                 </template>
@@ -64,7 +85,7 @@
                             <FeedNewsListSkeleton></FeedNewsListSkeleton>
                         </template>
                         <template v-else>
-                            <FeedNewsItem v-for="news in api_news">
+                            <FeedNewsItem class="news_item" v-for="news in api_news" @click="get_news_content(news.id)" :class="{ selected: news.id == selected_feed_item_id }">
                                 <template #title>
                                     {{ news.title }}
                                 </template>
@@ -73,8 +94,20 @@
                     </div>
                 </div>
 
-                <div class="px-4 py-6 border-t border-gray-200 shrink-0 sm:px-6 lg:w-96 lg:border-l lg:border-t-0 lg:pr-8 xl:pr-6">
-                    Right column area
+                <div class="px-4 py-6 border-t border-gray-200 shrink-0 sm:px-6 lg:w-1/2 lg:border-l lg:border-t-0 lg:pr-8 xl:pr-6">
+                    <FeedNewsContent v-if="api_news_content !== undefined">
+                        <template #title>
+                            {{ api_news_content.title }}
+                        </template>
+                        <template #description>
+                            <div v-html="api_news_content.description"></div>
+                        </template>
+                        <template #link>
+                            <a :href="api_news_content.link" class="block pt-4 text-sm font-bold" target="_blank">
+                                {{ api_news_content.link }}
+                            </a>
+                        </template>
+                    </FeedNewsContent>
                 </div>
         </div>
     </AppLayout>

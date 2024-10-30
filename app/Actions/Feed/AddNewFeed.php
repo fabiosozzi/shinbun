@@ -34,10 +34,10 @@ class AddNewFeed
         foreach ($feedSource->getItems() as $item) {
             FeedItem::create([
                 'feed_id' => $feed->id,
-                'title' => $item['title'],
-                'guid' => $item['guid'],
-                'link' => $item['link'],
-                'description' => $item['description'],
+                'title' => $item->title,
+                'guid' => $item->guid,
+                'link' => $item->link,
+                'description' => $item->description,
                 //'pub_date' => $item->getPubDate(),
             ]);
         }

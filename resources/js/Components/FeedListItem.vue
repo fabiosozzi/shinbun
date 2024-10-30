@@ -1,12 +1,16 @@
 <script setup>
-    import { Link } from '@inertiajs/vue3'
-
     import PrimaryButton from '@/Components/PrimaryButton.vue'
+
+    defineProps({
+        selected: {
+            type: Boolean
+        },
+    });
 </script>
 
 <template>
     <div>
-        <PrimaryButton class="mb-2" @click="Inertia">
+        <PrimaryButton class="w-full mb-2 text-left feed_item" :class="{ selected: selected }">
             <slot class="text-xs" name="title"></slot>
         </PrimaryButton>
     </div>
