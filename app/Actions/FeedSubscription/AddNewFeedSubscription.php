@@ -39,6 +39,8 @@ class AddNewFeedSubscription
 
         $feed_subscription = FeedSubscription::create($feed_subscription_array);
 
+        // TODO: utilizzare Queue per la sincronizzazione tra Feed e FeedSubscription
+
         return $feed_subscription;
     }
 
