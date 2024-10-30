@@ -12,7 +12,6 @@ class Feed extends Model
         'link',
         'description',
         'language',
-        'user_id',
     ];
 
     public function items(): HasMany

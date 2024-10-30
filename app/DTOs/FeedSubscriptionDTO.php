@@ -4,7 +4,7 @@ namespace App\DTOs;
 
 use WendellAdriel\ValidatedDTO\ValidatedDTO;
 
-class FeedDTO extends ValidatedDTO
+class FeedSubscriptionDTO extends ValidatedDTO
 {
     public string $title;
 
@@ -14,10 +14,13 @@ class FeedDTO extends ValidatedDTO
 
     public string $language;
 
+    public int $user_id;
+
     protected function rules(): array
     {
         return [
             'link' => ['required', 'string'],
+            'user_id' => ['required', 'integer'],
         ];
     }
 
