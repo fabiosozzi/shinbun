@@ -16,6 +16,8 @@ class FeedSubscriptionDTO extends ValidatedDTO
 
     public int $user_id;
 
+    public int $feed_id;
+
     protected function rules(): array
     {
         return [
@@ -23,6 +25,7 @@ class FeedSubscriptionDTO extends ValidatedDTO
             'description' => ['string'],
             'link' => ['required', 'string'],
             'user_id' => ['required', 'integer'],
+            'feed_id' => ['required', 'integer'],
         ];
     }
 

@@ -5,6 +5,7 @@ namespace App\Actions\FeedSubscription;
 use App\Actions\Feed\AddNewFeed;
 use App\DTOs\FeedDTO;
 use App\DTOs\FeedSubscriptionDTO;
+use App\Jobs\FeedSubscription\SyncFeedSubscriptionToFeed;
 use App\Models\Feed;
 use App\Models\FeedSubscription;
 use Illuminate\Http\JsonResponse;
@@ -23,6 +24,7 @@ class AddNewFeedSubscription
         }
 
         $feed_data_array = $feedDTO->toArray();
+        $feed_data_array['feed_id'] = $existingFeed->id;
         $feed_data_array['user_id'] = $user_id;
 
         if (! isset($feedDTO->title)) {
@@ -37,6 +39,7 @@ class AddNewFeedSubscription
         $feed_subscription = FeedSubscription::create($feed_subscription_dto->toArray());
 
         // TODO: use an action to sync FeedItems and FeedSubscriptionItems (with Queue)
+        SyncFeedSubscriptionToFeed::dispatch($existingFeed, $feed_subscription);
 
         return $feed_subscription;
     }

@@ -6,6 +6,8 @@ use App\Classes\Factories\FeedFactory;
 use App\DTOs\FeedDTO;
 use App\Jobs\Feed\AddItemsToFeedJob;
 use App\Models\Feed;
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class AddNewFeed
@@ -16,6 +18,8 @@ class AddNewFeed
     {
         $feedContent = file_get_contents($feedDTO->link);
         $feedSource = FeedFactory::create($feedContent);
+
+        // TODO: is it possibile to extract only title and description from the feed source?
         $feedSource->extractData($feedContent);
 
         $feedData = $feedDTO->toArray();
@@ -29,8 +33,10 @@ class AddNewFeed
         }
 
         $feed = Feed::create($feedData);
-        
-        collect($feedSource->getItems())->chunk(50)->each(function ($items) use ($feed) {
+
+        $array_batch_calls = [];
+
+        collect($feedSource->getItems())->chunk(size: config('feeds.chunk_size_items_import'))->each(function ($items) use ($feed, &$array_batch_calls) {
             $array_items = [];
             $items->each(function ($item) use ($feed, &$array_items) {
                 $array_items[] = [
@@ -43,8 +49,14 @@ class AddNewFeed
                 ];
             });
 
-            dispatch(new AddItemsToFeedJob($array_items));
+            $array_batch_calls[] = new AddItemsToFeedJob($array_items);
         });
+
+        $batch = Bus::batch($array_batch_calls)
+            ->then(function (Batch $batch) use ($feed) {
+                $feed->update(['status' => 'completed']);
+            })
+            ->dispatch();
 
         return $feed;
     }

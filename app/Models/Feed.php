@@ -12,9 +12,10 @@ class Feed extends Model
         'link',
         'description',
         'language',
+        'status',
     ];
 
-    public function items(): HasMany
+    public function feed_items(): HasMany
     {
         return $this->hasMany(FeedItem::class);
     }

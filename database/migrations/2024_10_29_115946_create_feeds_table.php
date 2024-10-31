@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('link');
             $table->text('description')->nullable();
             $table->string('language')->nullable();
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

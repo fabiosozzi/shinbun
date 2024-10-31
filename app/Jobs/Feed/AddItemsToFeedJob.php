@@ -2,17 +2,16 @@
 
 namespace App\Jobs\Feed;
 
-use Exception;
-use App\Models\Feed;
 use App\Models\FeedItem;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Foundation\Queue\Queueable;
+use Exception;
+use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 
 class AddItemsToFeedJob implements ShouldQueue
 {
-    use Queueable;
+    use Batchable, Queueable;
 
     /**
      * Create a new job instance.
@@ -34,11 +33,10 @@ class AddItemsToFeedJob implements ShouldQueue
                     'description' => $item['description'],
                     'pub_date' => $item['pub_date'],
                 ]);
-            }
-            catch(Exception $e) {
+            } catch (Exception $e) {
                 Log::alert($e->getMessage());
             }
-            
+
         }
     }
 }
