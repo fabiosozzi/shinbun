@@ -1,6 +1,6 @@
 <script setup>
     import { onMounted, ref } from 'vue';
-    import { Head, Link } from '@inertiajs/vue3';
+    import { Head } from '@inertiajs/vue3';
     import AppLayout from '@/Layouts/AppLayout.vue';
     import axios from 'axios';
     import FeedListItemSkeleton from '@/Components/FeedListItemSkeleton.vue';
@@ -40,7 +40,7 @@
 
         api_news.value = undefined
         api_news_content.value = undefined
-        axios.get(route('api.news.index', { feed: feed_id }))
+        axios.get(route('api.news.index', { feed_subscription_id: feed_id }))
             .then(response => {
                 api_news.value = response.data.news
             });
@@ -50,7 +50,7 @@
         selected_feed_item_id.value = feed_item_id
 
         api_news_content.value = undefined
-        axios.get(route('api.news.show', { feed: selected_feed_id.value, feed_item: feed_item_id }))
+        axios.get(route('api.news.show', { feed: selected_feed_id.value, feed_subscription_item_id: feed_item_id }))
             .then(response => {
                 api_news_content.value = response.data.news
             });
@@ -67,7 +67,7 @@
         <div class="w-full mx-auto grow lg:flex xl:px-2">
                 <!-- Left sidebar & main wrapper -->
                 <div class="flex-1 xl:flex">
-                    <div class="px-4 py-6 border-b border-gray-200 sm:px-6 lg:pl-8 xl:w-80 xl:shrink-0 xl:border-b-0 xl:border-r xl:pl-6">
+                    <div class="px-4 py-6 bg-white border-b border-gray-200 sm:px-6 lg:pl-8 xl:w-80 xl:shrink-0 xl:border-b-0 xl:border-r xl:pl-6">
                         <template v-if="api_feeds == undefined">
                             <FeedListItemSkeleton v-for="db_feed in db_feeds"></FeedListItemSkeleton>
                         </template>
@@ -86,6 +86,9 @@
                         </template>
                         <template v-else>
                             <FeedNewsItem class="news_item" v-for="news in api_news" @click="get_news_content(news.id)" :class="{ selected: news.id == selected_feed_item_id }">
+                                <template #pubDate>
+                                    {{ news.pub_date }}
+                                </template>
                                 <template #title>
                                     {{ news.title }}
                                 </template>
@@ -94,7 +97,7 @@
                     </div>
                 </div>
 
-                <div class="px-4 py-6 border-t border-gray-200 shrink-0 sm:px-6 lg:w-1/2 lg:border-l lg:border-t-0 lg:pr-8 xl:pr-6">
+                <div class="px-4 py-6 border-t border-gray-200 bg-slate-100 shrink-0 sm:px-6 lg:w-1/3 lg:border-l lg:border-t-0 lg:pr-8 xl:pr-6">
                     <FeedNewsContent v-if="api_news_content !== undefined">
                         <template #title>
                             {{ api_news_content.title }}
@@ -104,7 +107,7 @@
                         </template>
                         <template #link>
                             <a :href="api_news_content.link" class="block pt-4 text-sm font-bold" target="_blank">
-                                {{ api_news_content.link }}
+                                Leggi di più
                             </a>
                         </template>
                     </FeedNewsContent>
@@ -112,3 +115,13 @@
         </div>
     </AppLayout>
 </template>
+
+<style>
+button.feed_item.selected {
+    @apply bg-primary-500;
+}
+
+div.news_item.selected {
+    @apply bg-primary-500;
+}
+</style>
