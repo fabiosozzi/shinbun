@@ -25,11 +25,11 @@ const logout = () => {
 
         <Banner />
 
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100 shadow">
+        <div class="min-h-screen bg-white">
+            <nav class="border-b border-gray-100 shadow bg-primary-700">
                 <!-- Primary Navigation Menu -->
                 <div class="px-4 mx-auto sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
+                    <div class="flex justify-between h-14">
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex items-center shrink-0">
@@ -161,7 +161,7 @@ const logout = () => {
             </nav>
 
             <!-- Page Content -->
-            <main>
+            <main class="full_height">
                 <slot />
             </main>
         </div>

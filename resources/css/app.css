@@ -5,3 +5,7 @@
 [x-cloak] {
     display: none;
 }
+
+.full_height {
+    height: calc(100vh - 3.5rem);
+}

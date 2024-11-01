@@ -64,10 +64,10 @@
 <template>
     <Head :title="title" />
     <AppLayout>
-        <div class="w-full mx-auto grow lg:flex xl:px-2">
+        <div class="w-full mx-auto full_height grow lg:flex">
                 <!-- Left sidebar & main wrapper -->
                 <div class="flex-1 xl:flex">
-                    <div class="px-4 py-6 bg-white border-b border-gray-200 sm:px-6 lg:pl-8 xl:w-80 xl:shrink-0 xl:border-b-0 xl:border-r xl:pl-6">
+                    <div class="px-4 py-6 bg-gray-300 border-b border-gray-200 sm:px-6 lg:pl-8 xl:w-80 xl:shrink-0 xl:border-b-0 xl:border-r xl:pl-6">
                         <template v-if="api_feeds == undefined">
                             <FeedListItemSkeleton v-for="db_feed in db_feeds"></FeedListItemSkeleton>
                         </template>
@@ -80,7 +80,7 @@
                         </template>
                     </div>
 
-                    <div class="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
+                    <div class="px-4 py-6 bg-gray-200 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
                         <template v-if="api_news == undefined">
                             <FeedNewsListSkeleton></FeedNewsListSkeleton>
                         </template>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
 
-                <div class="px-4 py-6 border-t border-gray-200 bg-slate-100 shrink-0 sm:px-6 lg:w-1/3 lg:border-l lg:border-t-0 lg:pr-8 xl:pr-6">
+                <div class="px-4 py-6 bg-gray-100 border-t border-gray-200 shrink-0 sm:px-6 lg:w-1/3 lg:border-l lg:border-t-0 lg:pr-8 xl:pr-6">
                     <FeedNewsContent v-if="api_news_content !== undefined">
                         <template #title>
                             {{ api_news_content.title }}
