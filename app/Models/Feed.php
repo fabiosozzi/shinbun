@@ -19,4 +19,9 @@ class Feed extends Model
     {
         return $this->hasMany(FeedItem::class);
     }
+
+    public function feed_subscriptions(): HasMany
+    {
+        return $this->hasMany(FeedSubscription::class);
+    }
 }

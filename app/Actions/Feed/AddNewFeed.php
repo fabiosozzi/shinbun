@@ -4,6 +4,7 @@ namespace App\Actions\Feed;
 
 use App\Classes\Factories\FeedFactory;
 use App\DTOs\FeedDTO;
+use App\Events\Feed\FeedSuccessfullyReloaded;
 use App\Jobs\Feed\AddItemsToFeedJob;
 use App\Models\Feed;
 use Illuminate\Bus\Batch;
@@ -52,9 +53,10 @@ class AddNewFeed
             $array_batch_calls[] = new AddItemsToFeedJob($array_items);
         });
 
-        $batch = Bus::batch($array_batch_calls)
+        Bus::batch($array_batch_calls)
             ->then(function (Batch $batch) use ($feed) {
                 $feed->update(['status' => 'completed']);
+                FeedSuccessfullyReloaded::dispatch($feed);
             })
             ->dispatch();
 

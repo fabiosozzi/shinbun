@@ -28,7 +28,7 @@ class RssSource implements FeedSourceInterface
                     'guid' => $item['guid'],
                     'link' => $item['link'],
                     'description' => $item['description'],
-                    'pub_date' => date('Y-m-d H:i:s', strtotime($array['channel']['pubDate'])),
+                    'pub_date' => date('Y-m-d H:i:s', strtotime($item['pubDate'])),
                 ]);
             }
         }

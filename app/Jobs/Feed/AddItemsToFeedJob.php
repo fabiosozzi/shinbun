@@ -2,16 +2,16 @@
 
 namespace App\Jobs\Feed;
 
-use App\Models\FeedItem;
 use Exception;
+use App\Models\FeedItem;
 use Illuminate\Bus\Batchable;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AddItemsToFeedJob implements ShouldQueue
 {
-    use Batchable, Queueable;
+    use Batchable, InteractsWithQueue, Queueable;
 
     /**
      * Create a new job instance.
@@ -24,19 +24,14 @@ class AddItemsToFeedJob implements ShouldQueue
     public function handle(): void
     {
         foreach ($this->items as $item) {
-            try {
-                FeedItem::create([
-                    'feed_id' => $item['feed_id'],
-                    'title' => $item['title'],
-                    'guid' => $item['guid'],
-                    'link' => $item['link'],
-                    'description' => $item['description'],
-                    'pub_date' => $item['pub_date'],
-                ]);
-            } catch (Exception $e) {
-                Log::alert($e->getMessage());
-            }
-
+            FeedItem::create([
+                'feed_id' => $item['feed_id'],
+                'title' => $item['title'],
+                'guid' => $item['guid'],
+                'link' => $item['link'],
+                'description' => $item['description'],
+                'pub_date' => $item['pub_date'],
+            ]);
         }
     }
 }

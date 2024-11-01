@@ -2,14 +2,13 @@
 
 namespace App\Actions\FeedSubscription;
 
-use App\Actions\Feed\AddNewFeed;
-use App\DTOs\FeedDTO;
-use App\DTOs\FeedSubscriptionDTO;
-use App\Jobs\FeedSubscription\SyncFeedSubscriptionToFeed;
 use App\Models\Feed;
-use App\Models\FeedSubscription;
-use Illuminate\Http\JsonResponse;
+use App\DTOs\FeedDTO;
 use Illuminate\Http\Request;
+use App\Actions\Feed\AddNewFeed;
+use App\Models\FeedSubscription;
+use App\DTOs\FeedSubscriptionDTO;
+use Illuminate\Http\JsonResponse;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class AddNewFeedSubscription
@@ -18,28 +17,27 @@ class AddNewFeedSubscription
 
     public function handle(FeedDTO $feedDTO, int $user_id)
     {
-        $existingFeed = Feed::where('link', $feedDTO->link)->first();
-        if (! $existingFeed) {
-            $existingFeed = AddNewFeed::run($feedDTO);
+        $feed = Feed::where('link', $feedDTO->link)->first();
+        if (! $feed) {
+            $feed = AddNewFeed::run($feedDTO);
         }
 
         $feed_data_array = $feedDTO->toArray();
-        $feed_data_array['feed_id'] = $existingFeed->id;
+        $feed_data_array['feed_id'] = $feed->id;
         $feed_data_array['user_id'] = $user_id;
 
         if (! isset($feedDTO->title)) {
-            $feed_data_array['title'] = $existingFeed->title;
+            $feed_data_array['title'] = $feed->title;
         }
 
         if (! isset($feedDTO->description)) {
-            $feed_data_array['description'] = $existingFeed->description;
+            $feed_data_array['description'] = $feed->description;
         }
 
         $feed_subscription_dto = new FeedSubscriptionDTO($feed_data_array);
         $feed_subscription = FeedSubscription::create($feed_subscription_dto->toArray());
 
-        // TODO: use an action to sync FeedItems and FeedSubscriptionItems (with Queue)
-        SyncFeedSubscriptionToFeed::dispatch($existingFeed, $feed_subscription);
+        //SyncFeedSubscriptiontoFeed::run($feed, $feed_subscription);
 
         return $feed_subscription;
     }
