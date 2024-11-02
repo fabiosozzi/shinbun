@@ -10,8 +10,17 @@
 
 <template>
     <div>
-        <PrimaryButton class="w-full mb-2 text-left feed_item" :class="{ selected: selected }">
-            <slot class="text-xs" name="title"></slot>
+        <PrimaryButton class="feed-list-item" :class="{ selected: selected }">
+            <slot name="title"></slot>
         </PrimaryButton>
     </div>
 </template>
+
+<style scoped>
+    .feed-list-item {
+        @apply w-full mb-2 text-base text-left;
+    }
+    .feed-list-item.selected {
+        @apply bg-primary-600;
+    }
+</style>
