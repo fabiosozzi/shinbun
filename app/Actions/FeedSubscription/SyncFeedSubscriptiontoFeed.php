@@ -7,6 +7,7 @@ use Illuminate\Bus\Batch;
 use App\Models\FeedSubscription;
 use Illuminate\Support\Facades\Bus;
 use Lorisleiva\Actions\Concerns\AsAction;
+use App\Events\Feed\FeedSubscriptionSuccessfullyReloaded;
 use App\Jobs\FeedSubscription\SyncFeedSubscriptionItemsToFeedItemsJob;
 
 class SyncFeedSubscriptiontoFeed
@@ -27,6 +28,7 @@ class SyncFeedSubscriptiontoFeed
             })
             ->then(function (Batch $batch) use ($feedSubscription) {
                 $feedSubscription->update(['status' => 'completed']);
+                event(new FeedSubscriptionSuccessfullyReloaded($feedSubscription));
             })
             ->dispatch();
 

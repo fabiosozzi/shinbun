@@ -12,16 +12,19 @@
     const props = defineProps({
         title: String,
         db_feeds: Object,
-        selected_feed: Number,
-        selected_news: Number,
+        user_id: Number,
     })
-
 
     const api_feeds = ref(undefined)
     const api_news = ref(undefined)
     const api_news_content = ref(undefined)
     const selected_feed_id = ref(undefined)
     const selected_feed_item_id = ref(undefined)
+
+    Echo.channel(`feed-subscriptions.${props.user_id}`)
+        .listen('FeedSubscriptionSuccessfullyReloaded', (e) => {
+            console.log(e.feedSubscription);
+        })
 
     function get_feeds() {
         selected_feed_id.value = undefined

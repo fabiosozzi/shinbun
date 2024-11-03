@@ -16,6 +16,7 @@ class HomeController extends Controller
         return Inertia::render('Home', [
             'title' => 'Home',
             'db_feeds' => $db_feeds,
+            'user_id' => $request->user()->id,
         ]);
     }
 }
