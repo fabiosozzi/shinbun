@@ -68,7 +68,6 @@
     <Head :title="title" />
     <AppLayout>
         <div class="w-full mx-auto full_height grow lg:flex">
-                <!-- Left sidebar & main wrapper -->
                 <div class="flex-1 xl:flex">
                     <div class="w-1/3 p-2 bg-gray-200">
                         <template v-if="api_feeds == undefined">
@@ -109,7 +108,7 @@
                             <div v-html="api_news_content.description"></div>
                         </template>
                         <template #link>
-                            <a :href="api_news_content.link" class="block pt-4 text-sm font-bold" target="_blank">
+                            <a :href="api_news_content.link" target="_blank" class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out border border-transparent rounded-md bg-primary-500 hover:bg-primary-700 focus:bg-primary-700 active:bg-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50">
                                 Leggi di più
                             </a>
                         </template>

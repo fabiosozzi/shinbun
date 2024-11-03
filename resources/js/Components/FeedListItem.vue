@@ -18,7 +18,7 @@
 
 <style scoped>
     .feed-list-item {
-        @apply w-full mb-2 text-base text-left;
+        @apply w-full mb-2 text-sm text-left;
     }
     .feed-list-item.selected {
         @apply bg-primary-600;
