@@ -18,13 +18,15 @@ class GetAllFeedSubscriptions
     {
         return FeedSubscription::whereHas('user', function (Builder $query) use ($user_id) {
             $query->where('id', $user_id);
-        })->get();
+        })
+            ->withCount('feed_subscription_items')
+            ->get();
     }
 
     public function asController(Request $request): JsonResponse
     {
         // TODO: must include pagination?
-        
+
         $user_id = $request->user()->id;
 
         return response()->json([

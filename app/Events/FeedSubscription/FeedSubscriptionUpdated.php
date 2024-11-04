@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Events\Feed;
+namespace App\Events\FeedSubscription;
 
 use App\Models\FeedSubscription;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
-class FeedSubscriptionSuccessfullyReloaded implements ShouldBroadcast
+class FeedSubscriptionUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,7 +26,7 @@ class FeedSubscriptionSuccessfullyReloaded implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('feed-subscriptions.' . $this->feedSubscription->user->id),
+            new Channel('feed-subscriptions.'.$this->feedSubscription->user->id),
         ];
     }
 }

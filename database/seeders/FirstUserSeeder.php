@@ -22,8 +22,8 @@ class FirstUserSeeder extends Seeder
 
         $rss_list = [
             'https://www.repubblica.it/rss/scienze/rss2.0.xml',
-            'http://rss.art19.com/the-daily',
-            'https://multiplayer.it/feed/rss/news/'
+            //'http://rss.art19.com/the-daily',
+            'https://multiplayer.it/feed/rss/news/',
         ];
 
         foreach ($rss_list as $rss) {

@@ -8,6 +8,8 @@
     import FeedNewsListSkeleton from '@/Components/FeedNewsListSkeleton.vue';
     import FeedNewsItem from '@/Components/FeedNewsItem.vue';
     import FeedNewsContent from '@/Components/FeedNewsContent.vue';
+    import Spinner from '@/Components/Spinner.vue';
+    import FeedSubscriptionCount from '@/Components/FeedSubscriptionCount.vue';
 
     const props = defineProps({
         title: String,
@@ -15,15 +17,19 @@
         user_id: Number,
     })
 
-    const api_feeds = ref(undefined)
+    const api_feed_subscriptions = ref(undefined)
     const api_news = ref(undefined)
     const api_news_content = ref(undefined)
     const selected_feed_id = ref(undefined)
     const selected_feed_item_id = ref(undefined)
 
     Echo.channel(`feed-subscriptions.${props.user_id}`)
-        .listen('FeedSubscriptionSuccessfullyReloaded', (e) => {
-            console.log(e.feedSubscription);
+        .listen('FeedSubscription\\FeedSubscriptionUpdated', (e) => {
+            api_feed_subscriptions.value.forEach((feed) => {
+                if (feed.id == e.feedSubscription.id) {
+                    feed.status = e.feedSubscription.status
+                }
+            })
         })
 
     function get_feeds() {
@@ -32,8 +38,8 @@
 
         axios.get(route('api.feeds.index'))
             .then(response => {
-                api_feeds.value = response.data.feeds
-                get_news(api_feeds.value[0].id)
+                api_feed_subscriptions.value = response.data.feeds
+                get_news(api_feed_subscriptions.value[0].id)
             });
     }
 
@@ -70,13 +76,19 @@
         <div class="w-full mx-auto full_height grow lg:flex">
                 <div class="flex-1 xl:flex">
                     <div class="w-1/3 p-2 bg-gray-200">
-                        <template v-if="api_feeds == undefined">
+                        <template v-if="api_feed_subscriptions == undefined">
                             <FeedListItemSkeleton v-for="db_feed in db_feeds"></FeedListItemSkeleton>
                         </template>
                         <template v-else>
-                            <FeedListItem v-for="feed in api_feeds" :feedId="feed.id" @click="get_news(feed.id)" :selected="feed.id == selected_feed_id ? true : false">
+                            <FeedListItem v-for="feed in api_feed_subscriptions" :feedId="feed.id" @click="get_news(feed.id)" :selected="feed.id == selected_feed_id ? true : false">
                                 <template #title>
                                     <h2 class="font-bold">{{ feed.title }}</h2>
+                                </template>
+                                <template #status>
+                                    <Spinner v-if="feed.status == 'pending'"></Spinner>
+                                    <FeedSubscriptionCount v-else>
+                                        {{ feed.items_count }}
+                                    </FeedSubscriptionCount>
                                 </template>
                             </FeedListItem>
                         </template>

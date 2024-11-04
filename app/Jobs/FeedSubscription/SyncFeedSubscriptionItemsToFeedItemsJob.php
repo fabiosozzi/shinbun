@@ -2,13 +2,12 @@
 
 namespace App\Jobs\FeedSubscription;
 
-use App\Models\Feed;
-use Illuminate\Bus\Batchable;
 use App\Models\FeedSubscription;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Foundation\Queue\Queueable;
+use App\Models\FeedSubscriptionItem;
+use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\InteractsWithQueue;
 
 class SyncFeedSubscriptionItemsToFeedItemsJob implements ShouldQueueAfterCommit
 {
@@ -19,23 +18,17 @@ class SyncFeedSubscriptionItemsToFeedItemsJob implements ShouldQueueAfterCommit
     /**
      * Create a new job instance.
      */
-    public function __construct(private FeedSubscription $feedSubscription, private Collection $items) {}
+    public function __construct(private FeedSubscription $feedSubscription, private array $items) {}
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-
-        // TODO: implement UPSERT function to avoid duplicates
-        $this->items->each(function ($item) {
-            $this->feedSubscription->feed_subscription_items()->create([
-                'title' => $item->title,
-                'guid' => $item->guid,
-                'link' => $item->link,
-                'description' => $item->description,
-                'pub_date' => $item->pub_date,
-            ]);
-        });
+        FeedSubscriptionItem::upsert(
+            $this->items,
+            ['feed_subscription_id', 'guid'],
+            ['title', 'link', 'description', 'pub_date']
+        );
     }
 }

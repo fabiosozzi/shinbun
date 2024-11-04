@@ -2,13 +2,13 @@
 
 namespace App\Actions\FeedSubscription;
 
-use App\Models\Feed;
-use App\DTOs\FeedDTO;
-use Illuminate\Http\Request;
 use App\Actions\Feed\AddNewFeed;
-use App\Models\FeedSubscription;
+use App\DTOs\FeedDTO;
 use App\DTOs\FeedSubscriptionDTO;
+use App\Models\Feed;
+use App\Models\FeedSubscription;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class AddNewFeedSubscription
@@ -36,8 +36,6 @@ class AddNewFeedSubscription
 
         $feed_subscription_dto = new FeedSubscriptionDTO($feed_data_array);
         $feed_subscription = FeedSubscription::create($feed_subscription_dto->toArray());
-
-        //SyncFeedSubscriptiontoFeed::run($feed, $feed_subscription);
 
         return $feed_subscription;
     }

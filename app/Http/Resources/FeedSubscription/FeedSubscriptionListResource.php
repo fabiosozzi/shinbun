@@ -18,7 +18,8 @@ class FeedSubscriptionListResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'link' => $this->link,
-            'items' => FeedSubscriptionItemListResource::collection($this->whenLoaded('items')),
+            'status' => $this->status,
+            'items_count' => $this->feed_subscription_items_count,
         ];
     }
 }

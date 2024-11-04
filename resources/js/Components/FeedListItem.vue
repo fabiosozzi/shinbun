@@ -11,7 +11,14 @@
 <template>
     <div>
         <PrimaryButton class="feed-list-item" :class="{ selected: selected }">
-            <slot name="title"></slot>
+            <div class="flex justify-between w-full">
+                <div>
+                    <slot name="title"></slot>
+                </div>
+                <div>
+                    <slot name="status"></slot>
+                </div>
+            </div>
         </PrimaryButton>
     </div>
 </template>

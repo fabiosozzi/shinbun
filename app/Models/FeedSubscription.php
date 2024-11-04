@@ -14,6 +14,7 @@ class FeedSubscription extends Model
         'description',
         'language',
         'user_id',
+        'status',
     ];
 
     public function user(): BelongsTo
