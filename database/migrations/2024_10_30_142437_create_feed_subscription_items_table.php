@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('link');
             $table->text('description')->nullable();
             $table->dateTime('pub_date')->nullable();
+            $table->unique(['feed_subscription_id', 'guid']);
             $table->timestamps();
         });
     }
