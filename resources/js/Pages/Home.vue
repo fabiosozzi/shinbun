@@ -82,7 +82,7 @@
                         <template v-else>
                             <FeedListItem v-for="feed in api_feed_subscriptions" :feedId="feed.id" @click="get_news(feed.id)" :selected="feed.id == selected_feed_id ? true : false">
                                 <template #title>
-                                    <h2 class="font-bold">{{ feed.title }}</h2>
+                                    <div class="text-xs font-bold">{{ feed.title }}</div>
                                 </template>
                                 <template #status>
                                     <Spinner v-if="feed.status == 'pending'"></Spinner>
@@ -112,17 +112,15 @@
                 </div>
 
                 <div class="p-2 bg-gray-100 lg:w-2/5">
-                    <FeedNewsContent v-if="api_news_content !== undefined">
+                    <FeedNewsContent v-if="api_news_content !== undefined" :link="api_news_content.link">
                         <template #title>
                             {{ api_news_content.title }}
                         </template>
                         <template #description>
                             <div v-html="api_news_content.description"></div>
                         </template>
-                        <template #link>
-                            <a :href="api_news_content.link" target="_blank" class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out border border-transparent rounded-md bg-primary-500 hover:bg-primary-700 focus:bg-primary-700 active:bg-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50">
-                                Leggi di più
-                            </a>
+                        <template #link >
+                            Leggi di più
                         </template>
                     </FeedNewsContent>
                 </div>
