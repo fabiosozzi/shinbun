@@ -75,7 +75,7 @@
     <AppLayout>
         <div class="w-full mx-auto full_height grow lg:flex">
                 <div class="flex-1 xl:flex">
-                    <div class="w-1/3 p-2 bg-gray-200">
+                    <div class="w-2/5 p-2 bg-gray-200">
                         <template v-if="api_feed_subscriptions == undefined">
                             <FeedListItemSkeleton v-for="db_feed in db_feeds"></FeedListItemSkeleton>
                         </template>
@@ -94,7 +94,7 @@
                         </template>
                     </div>
 
-                    <div class="w-2/3 p-2">
+                    <div class="w-3/5 p-2">
                         <template v-if="api_news == undefined">
                             <FeedNewsListSkeleton></FeedNewsListSkeleton>
                         </template>
